@@ -9,9 +9,9 @@ Overview
 
 Render, merge and validate docker_compose files for deploying a stack.
 
-This library is using docker-compose merging process,
-and at the end it does a final verification to let users know whether this is a valid
-docker-compose for deploying a stack
+This library is using docker-compose merging process, but at the end
+it does a final verification to let users know whether this is a valid
+docker-compose for deploying a stack or not, as docker-compose doesn't validate that.
 
 Additionally, this library will compile valid yaml jinja2 templates, so they can
 be merged along with the other docker-compose files.
@@ -104,3 +104,12 @@ stack_config = StackConfigCompose(yml_compiled_files, '/tmp/docker-compose-outpu
 stack_config.merge_stack_compose()
 
 ```
+
+Not Exactly What You Want?
+----------------------------
+
+Options that may be a good fit for you:
+
+- https://github.com/sinzlab/jinja-compose
+- https://github.com/Aisbergg/python-docker-compose-templer
+- https://github.com/docker/compose
