@@ -1,0 +1,10 @@
+pytest
+pytest-cov
+tox
+black
+flake8
+bumpversion
+pre-commit
+sphinx
+sphinx_rtd_theme
+pip-tools

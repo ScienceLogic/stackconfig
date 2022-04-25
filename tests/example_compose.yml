@@ -1,0 +1,98 @@
+version: '3.3'
+services:
+  example:
+    image: registry.example/example:1.0.0
+    environment:
+      LOGLEVEL: 30
+    secrets:
+      - passwd
+    deploy:
+      replicas: 5
+      resources:
+        limits:
+          memory: 2G
+      restart_policy:
+        condition: any
+        delay: 10s
+    networks:
+      - examplenet
+    volumes:
+      - "/var/log/example:/var/log/example"
+      - type: volume
+        source: example_volume
+        target: /tmp/example_volume
+        read_only: true
+  db:
+    image: registry.example/db:1.0.0
+    volumes:
+    - /var/data/db:/tmp/db
+    - type: volume
+      target: /tmp/service
+      source: tmp_db
+    networks:
+      isnet:
+        aliases:
+          - db
+    secrets:
+      - passwd
+    ulimits:
+      nofile: 4096
+      core: 100000000
+      memlock: 100000000
+  api:
+    image: registry.example/api:1.0.0
+    networks:
+      isnet:
+        aliases:
+          - api
+    secrets:
+      - passwd
+    depends_on:
+      - example
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+    volumes:
+      - type: volume
+        source: example
+        target: /var/example
+        read_only: true
+  ui:
+    image: registry.example/gui-example:1.0.0
+    networks:
+      isnet:
+        aliases:
+          - ui
+    hostname: ui
+    secrets:
+      - passwd
+    volumes:
+    - type: tmpfs
+      target: /tmp
+    - type: tmpfs
+      target: /data
+  example_server:
+    image: registry.example/example_server
+    networks:
+      isnet:
+        aliases:
+          - example_server
+    deploy:
+      restart_policy:
+        condition: on-failure
+secrets:
+  passwd:
+    file: /etc/passwd
+networks:
+  isnet:
+    driver: overlay
+    driver_opts:
+      encrypted: "true"
+volumes:
+  example:
+  tmp_db:
+  example_volume:
+configs:
+  config_example:
+    file: /etc/config.yaml

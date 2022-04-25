@@ -7,10 +7,17 @@ author: ScienceLogic
 Overview
 --------
 
-Merge and compile jinja2 template compose files
+Render, merge and validate docker_compose files for deploying a stack.
 
-Installation / Usage
---------------------
+This library is using docker-compose merging process,
+and at the end it does a final verification to let users know whether this is a valid
+docker-compose for deploying a stack
+
+Additionally, this library will compile valid yaml jinja2 templates, so they can
+be merged along with the other docker-compose files.
+
+Installation
+------------
 
 To install use pip:
 
@@ -54,15 +61,9 @@ git push origin release-n.n.0
 or
 git push origin hotfix-x.x.n
 ```
-Contributing
-------------
 
-TBD
-
-
-
-Example
--------
+Usage example as cli tool 
+-------------------------
 
 ```shell
 $ stackconfig --help
@@ -83,20 +84,21 @@ Options:
 ```
 
 ```
-$ stackconfig -f docker-compose.yml -f docker-compose-verrideyml -t docker-compose-valid-template.yml.j2 -d data_file.yml --version 3.8 -o docker-compose.yml
+$ stackconfig -f docker-compose.yml -f compose-override.yml -t docker-compose-template.yml.j2 -d data_file.yml --version 3.8 -o docker-compose-final.yml
 ```
 
-Example using python code
--------------------------
+Usage example using Python
+--------------------------
 ```python
-from stackconfig.stackconfig import StackConfigCompose, render_jijnja2_compose
+from stackconfig.stackconfig import StackConfigCompose
+from stackconfig.utils.jinja2_utils import render_jijnja2_compose
 
 jinja_env = {}
 yml_compiled_files = render_jijnja2_compose(['/tmp/docker-compose.yml.j2',
-                                    '/tmp/docker-compose-override-yml.j2'],
-                                   data_file='/tmp/data_file.yml',
-                                   data_dict=jinja_env)
-# valid docker-compose files can be append, as all of them 
+                                             '/tmp/docker-compose-override-yml.j2'],
+                                            data_file='/tmp/data_file.yml',
+                                            data_dict=jinja_env)
+# valid docker-compose files can be appended, all of them are going to be merged using the docker-compose library
 yml_compiled_files.append("/tmp/docker-copmose-override2.yml")
 stack_config = StackConfigCompose(yml_compiled_files, '/tmp/docker-compose-output.yml')
 stack_config.merge_stack_compose()
