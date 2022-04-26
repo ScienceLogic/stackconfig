@@ -1,4 +1,4 @@
-version: '3.3'
+version: '3.8'
 services:
   example:
     image: registry.example/example:1.0.0

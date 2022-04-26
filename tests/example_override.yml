@@ -8,6 +8,10 @@ services:
     environment:
       db_host: {{ DB_HOST if DB_HOST is defined else "test"}}
   ui:
+    deploy:
+      mode: replicated
+      placement:
+        max_replicas_per_node: 1
     environment:
       LOGLEVEL: {{ DB_HOST }}
     volumes:
