@@ -3,7 +3,7 @@ import tempfile
 from jinja2.nativetypes import NativeEnvironment
 from jinja2 import Undefined
 
-from stackconfig.utils.yaml_utils import save_compose, load_compose
+from stackconfig.utils.yaml_utils import load_compose
 
 
 def render_jijnja2_compose(templates, data_file=None, data_dict=None, jinja2_env=None):
@@ -36,7 +36,8 @@ def render_jijnja2_compose(templates, data_file=None, data_dict=None, jinja2_env
                 name = f.name
         except Exception as err:
             raise Exception(
-                f"Please be sure the template {template} is valid. Error: {str(err)}. Error-type: {type(err).__name__}"
+                f"Please be sure the template {template} is valid. Error: {str(err)}. Error-type: {type(err).__name__}. "
+                f"Be sure to escape docker syntax. i.e test-{{{{ '{{.Task.ID}}' }}}}"
             )
         template_files.append(name)
     return template_files

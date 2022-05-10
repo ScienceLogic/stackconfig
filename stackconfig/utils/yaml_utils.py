@@ -1,4 +1,5 @@
 import yaml
+import os
 
 
 def save_compose(compose_definition, path_to_save, as_text=False):
@@ -30,7 +31,14 @@ def load_compose(compose_path):
         with open(compose_path) as f:
             compose_definition = yaml.safe_load(f)
     except FileNotFoundError:
-        print("WARNING no compose file found at: {}".format(compose_path))
+        print("ERROR: no compose file found at: {}".format(compose_path))
         compose_definition = {}
 
     return compose_definition
+
+
+def remove_files(files_list):
+    if isinstance(files_list, str):
+        files_list = [files_list]
+    for jf in files_list:
+        os.remove(jf)

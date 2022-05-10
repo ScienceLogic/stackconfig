@@ -4,7 +4,7 @@ from compose.config.serialize import serialize_config
 from compose.cli.command import get_config_from_options
 
 
-from stackconfig.utils.yaml_utils import save_compose, load_compose
+from stackconfig.utils.yaml_utils import save_compose, load_compose, remove_files
 from stackconfig.utils.validate_compose import validate_docker_stack_compose
 
 
@@ -29,6 +29,8 @@ class StackConfigCompose:
         name_tmp_file = tempfile.NamedTemporaryFile().name
         save_compose(compose_config_str, name_tmp_file, as_text=True)
         self.compose_dict = load_compose(name_tmp_file)
+
+        remove_files(name_tmp_file)
 
         if self.version and isinstance(self.version, str):
             self.compose_dict["version"] = self.version

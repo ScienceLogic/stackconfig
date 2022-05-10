@@ -1,7 +1,7 @@
 import tempfile
 import subprocess
 
-from stackconfig.utils.yaml_utils import save_compose
+from stackconfig.utils.yaml_utils import save_compose, remove_files
 
 
 def validate_docker_stack_compose(compose_dict):
@@ -15,5 +15,8 @@ def validate_docker_stack_compose(compose_dict):
     result = subprocess.getoutput(
         f"docker stack deploy -c {name_tmp_file} tmp_stack"
     )
+    remove_files([name_tmp_file])
     if "Additional property z_dummy is not allowed" not in result:
-        raise Exception(f"Invalid compose file: Please check {result}")
+        print(f"INFO: docker stack validation failed: {result}. "
+              f"This is only a warning as docker may not be installed or "
+              f"the user doesnt have perms to execute docker cmds.")

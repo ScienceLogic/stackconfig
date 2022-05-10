@@ -4,6 +4,7 @@ import click
 
 from stackconfig.stackconfig import StackConfigCompose
 from stackconfig.utils.jinja2_utils import render_jijnja2_compose
+from stackconfig.utils.yaml_utils import remove_files
 
 
 @click.command()
@@ -42,16 +43,20 @@ from stackconfig.utils.jinja2_utils import render_jijnja2_compose
 @click.option("--version", help="Set valid version for the final docker-compose file", default=None)
 def cli(file, output, j2template=None, j2data=None, version=None):
     try:
+        jinja_files = []
         file = list(set(file))
         if j2template:
             if not j2data:
                 print(
                     "WARNING: No yaml data file should be provided with the data to render the jinja template"
                 )
-            file = file + render_jijnja2_compose(list(set(j2template)), j2data)
+            jinja_files = render_jijnja2_compose(list(set(j2template)), j2data)
+            file = file + jinja_files
         stack_config = StackConfigCompose(file, output, version)
         stack_config.merge_stack_compose()
         print(f"INFO: The docker-compose file was saved in: {output}")
     except Exception as exc:
         print(f"ERROR: {str(exc)}")
         exit(1)
+    finally:
+        remove_files(jinja_files)
