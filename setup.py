@@ -2,7 +2,6 @@ from setuptools import setup, find_packages
 from codecs import open
 from os import path
 
-__version__ = "0.1.0"
 
 here = path.abspath(path.dirname(__file__))
 
@@ -21,12 +20,11 @@ dependency_links = [
 
 setup(
     name="stackconfig",
-    version=__version__,
     description="Render, merge and validate docker_compose files for deploying a stack",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/Sciencelogic/stackconfig",
-    download_url="https://github.com/Sciencelogic/stackconfig/tarball/" + __version__,
+    download_url="https://github.com/Sciencelogic/stackconfig/tarball/",
     license="BSD",
     classifiers=[
         "Development Status :: 3 - Alpha",
