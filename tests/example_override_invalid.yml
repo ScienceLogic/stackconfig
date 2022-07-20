@@ -1,0 +1,21 @@
+version: '3.8'
+services:
+  service_custom:
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          memory: 2G
+    environment:
+      test: test
+    hostname: custom-{{.Task.ID}}
+  {% for i in range(8) %}
+  notebook{{i}}:
+    image: sinzlab/pytorch
+    ports:
+      - "300{{i}}:8888"
+    environment:
+      - NVIDIA_VISIBLE_DEVICES={{i}}
+    volumes:
+      - ./notebooks:/notebooks
+  {% endfor %}
