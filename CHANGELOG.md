@@ -1,5 +1,12 @@
 # Semantic Versioning Changelog
 
+## [1.0.1](https://github.com/ScienceLogic/stackconfig/compare/v1.0.0...v1.0.1) (2022-07-22)
+
+
+### Bug Fixes
+
+* update req to support older docker-compose versions ([c0f0daf](https://github.com/ScienceLogic/stackconfig/commit/c0f0daf3513fbc8120ab9aa8ec9e851194dcb501))
+
 # 1.0.0 (2022-07-20)
 
 
