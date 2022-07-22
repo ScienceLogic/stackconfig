@@ -1,5 +1,5 @@
 Click
-docker-compose>=1.27.4<=1.29.2
+docker-compose>=1.26.2<=1.29.2
 pyyaml>=5.4.1
 MarkupSafe
 jinja2
