@@ -54,13 +54,15 @@ def test_merge_compose_files_invalid(version, mock_success_subprocess):
 def test_merge_compose_files_syntax_error(mock_success_subprocess):
     with open("/tmp/invalid-compose.yml", "+w") as file:
         file.writelines("{}\ntests: test_value".format("test"))
+    with open("/tmp/override_invalid.yml", "+w") as file:
+        file.writelines("{}\ntests: test_value".format("test"))
     with pytest.raises(Exception) as exc:
         c = StackConfigCompose(
             ["/tmp/invalid-compose.yml", "/tmp/override_invalid.yml"],
             "/tmp/temp_result_invalid.yml",
         )
         c.merge_stack_compose()
-    assert "mapping values are not allowed here" in str(exc)
+    assert "mapping values are not allowed in this context" in str(exc)
 
 
 def test_merge_compose_files_invalid_syntax_compose_validation(mock_error_subprocess):
@@ -73,4 +75,4 @@ def test_merge_compose_files_invalid_syntax_compose_validation(mock_error_subpro
             ["tests/example_compose.yml"] + templates, "/tmp/temp_result.yml"
         )
         c.merge_stack_compose()
-    assert f"services.service_custom.deploy.replicas contains an invalid type" in str(err)
+    assert f"services.service_custom.deploy.replicas must be a integer" in str(err)
